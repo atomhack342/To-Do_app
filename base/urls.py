@@ -2,7 +2,7 @@ from django.urls import path
 
 # importing all the views manually
 from .views import *
-
+from . import views
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -15,5 +15,8 @@ urlpatterns = [
     path('task-create/',TaskCreate.as_view(), name='task-create'),
     path('task-update/<int:pk>/', TaskUpdate.as_view(), name='task-update'),
     path('task-delete/<int:pk>/',DeleteView.as_view(), name='task-delete'),
+
+    # path('<int:year>/<str:month>/', views.CalenderlView, name='calender'),
+    path('calendar/', views.CalenderlView, name='calendar'),
 
 ]

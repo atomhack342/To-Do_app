@@ -1,4 +1,3 @@
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -16,28 +15,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="{% static '/css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/calendar.css' %}">
 
-    <title>Task Confirm</title>
+    <title>Create Task</title>
 </head>
 
 <body>
 
-    <div class="container">
+    <center>
+        <div class="container" style="overflow-x:auto; padding: 30px;">
+            <div class="header-bar">
+                <a href="{% url 'tasks' %}">&#8592; Go Back</a>
+    
+            </div>
 
-        <div class="header-bar">
-            <a href="{% url 'tasks' %}">&#8592; Go Back</a>
-
+            <h4 style="padding: 10px;">Hello {{request.user|title}} </h4>
+            <h5>{{ month }} : {{ year }}</h5>
+            
+            <b>Time {{ time }}</b>
+            <br> <br>
+            {{ cal|safe }}
+            <br>
         </div>
-
-        <div class="card-body">
-            <form method="POST">
-                {% csrf_token %}
-                <p>Are you sure you want to delete this task ? "{{task}}"</p>
-                <input class="button1" type="submit" value="Delete">
-            </form>
-
-        </div>
-    </div>
+    </center>
+    
 
 
 
@@ -53,4 +54,3 @@
     crossorigin="anonymous"></script>
 
 </html>
-
