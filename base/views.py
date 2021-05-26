@@ -9,17 +9,11 @@ from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 
 from .models import Task
-from .decorators import *
-import datetime
-from datetime import datetime
-
-import calendar
-from calendar import HTMLCalendar
 # Create your views here.
+
 
 
 class CustomLoginViews(LoginView):
@@ -88,6 +82,7 @@ class TaskCreate(LoginRequiredMixin, CreateView):
         return super(TaskCreate, self).form_valid(form)
 
 
+
 class TaskUpdate(LoginRequiredMixin, UpdateView):
     model = Task
     fields = ['title', 'description', 'complete']
@@ -100,41 +95,4 @@ class DeleteView(LoginRequiredMixin, DeleteView):
     context_object_name = 'task'
     success_url = reverse_lazy('tasks')
     template_name = 'base/task_confirm.html'
-
-
-def CalenderlView(request):
-    
-    # get corrent year
-    now = datetime.now()
-    current_year = now.year
-
-    month = now.month
-    year = now.year
-
-    # conver month from name to number
-    # month_number = list(calendar.month_name).index(month)
-    # month_number = int(month_number)
-
-    
-
-    # create a calendar
-    cal = HTMLCalendar().formatmonth(
-        year,
-        month
-    )
-
-
-    # get current time
-    time = now.strftime('%I:%M %p')
-
-    return render(request, 
-        'base/calendar.html', {
-        "year": year,
-        "month": month,
-        # "month_number": month_number,
-        "cal": cal,
-        "current_year": current_year,
-        "time": time
-
-     })
 

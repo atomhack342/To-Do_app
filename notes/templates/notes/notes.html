@@ -1,0 +1,255 @@
+
+
+
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Notes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+
+
+    <style>
+        body {
+            background-color: #FAFAFA;
+            font-family: 'Nunito', sans-serif;
+            padding-top: 50px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Raleway', sans-serif;
+
+        }
+
+        a, p {
+            color: #4b5156;
+            font-weight: 900;
+
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+            background: linear-gradient(90deg, #90a3ee 0%, #5f9ee1 43%, #5f9ee1 100%);
+        }
+
+        .header-bar a {
+            color: rgb(247, 247, 247);
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            -webkit-box-shadow: 4px 4px 26px -8px rgba(0, 0, 0, 0.21);
+            box-shadow: 4px 4px 26px -8px rgba(0, 0, 0, 0.21);
+
+        }
+
+        .task-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #fff;
+            border-top: 1px solid rgb(226, 226, 226);
+        }
+
+        .task-title {
+            display: flex;
+        }
+
+        .task-title a {
+            text-decoration: none;
+            color: #4b5156;
+            margin-left: 10px;
+        }
+
+        .task-complete-icon {
+            height: 20px;
+            width: 20px;
+            background-color: rgb(105, 210, 105);
+            border-radius: 50%;
+        }
+
+        .task-incomplete-icon {
+            height: 20px;
+            width: 20px;
+            background-color: rgb(218, 218, 218);
+            border-radius: 50%;
+        }
+
+        .delete-link {
+            text-decoration: none;
+            font-weight: 980;
+            color: #cf4949;
+            font-size: 22px;
+            line-height: 0;
+        }
+
+        #search-add-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        #add-link {
+            color: #EB796F;
+            text-decoration: none;
+            font-size: 42px;
+            text-shadow: 1px 1px #81413B;
+        }
+
+        input[type=text], input[type=password] {
+            border: 1px solid #6feb7d;
+            border-radius: 5px;
+            padding: 10px;
+            width: 90%;
+
+        }
+
+        textarea {
+            border: 1px solid #6feb7d;
+            border-radius: 5px;
+            padding: 10px;
+            width: 90%;
+        }
+
+        
+
+        label {
+            padding-top: 10px !important;
+            display: block;
+        }
+
+        .button1 {
+            border: 1px solid #EB796F;
+            background-color: #FAFAFA;
+            color: #EB796F;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button2 {
+            border: 1px solid #6feb7d;
+            background-color: #FAFAFA;
+            color: #6feb7d;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body a{
+            text-decoration: none;
+            font-weight: 900;
+        }
+
+
+    </style>
+
+    
+</head>
+
+<body>
+
+    <div class="container">
+
+
+        {% include 'base/navbar.html' %}
+
+        <section class="section">
+            <div class="columns">
+                <div class="column is-2">
+                    <aside class="menu">
+                        <p class="menu-label">Documents</p>
+
+                        <ul class="menu-list">
+                            {% for doc in documents %}
+                            <li>
+                                <a href="{% url 'notes' %}?docid={{ doc.id }}">{{ doc.title }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                </div>
+
+                <div class="column is-10">
+                    <form method="post" action="{% url 'notes' %}">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="docid" value="{{ docid }}">
+
+                        <div class="field">
+                            <label class="label">
+                                Title
+
+                                {% if document %}
+                                <span class="has-text-grey-light">
+                                    Created at: {{ document.created_at|date:"m/d Y" }} /
+                                    Modified at: {{ document.modified_at|date:"m/d Y" }}
+                                </span>
+                                {% endif %}
+                            </label>
+
+                            <div class="control">
+                                <input type="text" class="input" name="title" placeholder="Title" {% if document %}
+                                    value="{{ document.title }}" {% endif %}>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Content</label>
+
+                            <div class="control">
+                                <textarea class="textarea" name="content"
+                                    placeholder="Content">{% if document %}{{ document.content }}{% endif %}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button is-primary">Save</button>
+                            </div>
+                            {% if document %}
+                            <div class="control">
+                                <a href="{% url 'delete_document' document.id %}" class="button is-danger">Delete</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+</html>
